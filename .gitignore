@@ -11,4 +11,5 @@
 #Busybox and and kernel builds
 busybox-1.36.1/
 linux-6.12.43/
+rootfs/
 
