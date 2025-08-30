@@ -2,6 +2,8 @@
 #build outputs
 *.o 
 *.ko
+/driver/*mod 
+/driver/*cmd
 
 #images
 *.img

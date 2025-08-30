@@ -14,9 +14,9 @@ init:
 	mknod -m 660 rootfs/dev/tty3 c 4 3
 	mknod -m 660 rootfs/dev/tty4 c 4 4
 build:
-	cd rootfs && find . -print0 | cpio --null -ov --format=newc | gzip -9 > ../rootfs.cpio.gz
 	$(MAKE) -C ./driver
 	cp ./driver/test.ko ./rootfs
+	cd rootfs && find . -print0 | cpio --null -ov --format=newc | gzip -9 > ../rootfs.cpio.gz
 
 run:
 	qemu-system-x86_64 -m 512M -kernel linux-6.12.43/arch/x86_64/boot/bzImage -initrd rootfs.cpio.gz  -append "root=/dev/mem"
