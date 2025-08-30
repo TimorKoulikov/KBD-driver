@@ -2,7 +2,8 @@
 all: run
 
 #must build busyBox in ./busybox
-build:
+
+init:
 	mkdir rootfs
 	mdkir rootfs -p rootfs/{bin,sbin,etc,proc,usr/{bin,sbin}}
 	cp -av busybox/_install/* rootfs/
@@ -12,7 +13,10 @@ build:
 	mknod -m 660 rootfs/dev/tty2 c 4 2
 	mknod -m 660 rootfs/dev/tty3 c 4 3
 	mknod -m 660 rootfs/dev/tty4 c 4 4
-	find ./rootfs -print0 | cpio --null -ov --format=newc | gzip -9 > ../rootfs.cpio.gz
+build:
+	cd rootfs && find . -print0 | cpio --null -ov --format=newc | gzip -9 > ../rootfs.cpio.gz
+	$(MAKE) -C ./driver
+	cp ./driver/test.ko ./rootfs
 
 run:
 	qemu-system-x86_64 -m 512M -kernel linux-6.12.43/arch/x86_64/boot/bzImage -initrd rootfs.cpio.gz  -append "root=/dev/mem"
